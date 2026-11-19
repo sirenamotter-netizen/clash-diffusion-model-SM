@@ -11,6 +11,10 @@ def plot_profile(grid, elevation, color="r", title=None, output=None):
         plt.title(title)
     if output is not None:
         plt.savefig(output)
+
+
+def calculate_stable_time_step(grid_spacing, diffusivity):
+    return 0.5 * grid_spacing**2/diffusivity
         
 
 D = 100 # diffusivity 
@@ -29,7 +33,7 @@ z[x> Lx/2] = z_right  # z for values of x greater than half the domain = 0
 plot_profile(x,z, title="Initial hillslope profile", output="initial-profile.png")
 
 nt = 5000 # number of time steps 
-dt = 0.5 * dx**2/D  # time step (seconds)
+dt = calculate_stable_time_step(dx, D)
 
 for t in range(0, nt):
 	z[1:-1] += D * dt / dx ** 2 * (z[:-2] - 2*z[1:-1] + z[2:])
